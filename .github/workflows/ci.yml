@@ -1,0 +1,22 @@
+name: ci-node-workflow
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  check-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalando dependências
+        run: npm install
+      - name: Executando os testes
+        run: npm test
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
